@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npm run check:types || (
+    echo "❌ Failed to check types. Please fix the errors and try again."
+    false;
+)
+
+npm run check:format || (
+    echo "❌ Failed to check formatting. Please fix the errors and try again."
+    false;
+)
+
+npm run check:lint || (
+    echo "❌ Failed to check linting. Please fix the errors and try again."
+    false;
+)
+
+echo "✅ All checks passed. Trying to build the project..."
+
+npm run build || (
+    echo "❌ Failed to build the project. Please fix the errors and try again."
+    false;
+)
+
+echo "✅ Project built successfully. Cleaning up..."
+rm -rf .next
