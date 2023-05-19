@@ -4,6 +4,7 @@ import DashboardLayout from "~/components/dashboard/dashboard-layout";
 import { OverviewChart } from "~/components/dashboard/overview-chart";
 import { PercentangeChange } from "~/components/dashboard/percent-change";
 import { RecentSales } from "~/components/dashboard/recent-sales";
+import LoadingSpinner from "~/components/global/loading-spinner";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -13,8 +14,15 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { formatNumber, formatPrice } from "~/lib/utils";
+import { api } from "~/utils/api";
 
 export default function Page() {
+  const { data: reports, isLoading: isLoadingReports } =
+    api.reports.dashboard.useQuery();
+
+  const { data: yearlySales, isLoading: isLoadingSales } =
+    api.reports.yearlySales.useQuery();
+
   return (
     <>
       <Head>
@@ -43,10 +51,19 @@ export default function Page() {
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{formatPrice(0)}</div>
-                <p className="text-xs text-muted-foreground">
-                  <PercentangeChange value={0} />
-                </p>
+                {isLoadingReports && <LoadingSpinner />}
+                {!isLoadingReports && reports?.revenue && (
+                  <>
+                    <div className="text-2xl font-bold">
+                      {formatPrice(reports.revenue.currentTotal)}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      <PercentangeChange
+                        value={reports.revenue.percentageChange}
+                      />
+                    </p>
+                  </>
+                )}
               </CardContent>
             </Card>
             <Card>
@@ -55,10 +72,19 @@ export default function Page() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{formatNumber(0)}</div>
-                <p className="text-xs text-muted-foreground">
-                  <PercentangeChange value={0} />
-                </p>
+                {isLoadingReports && <LoadingSpinner />}
+                {!isLoadingReports && reports?.customers && (
+                  <>
+                    <div className="text-2xl font-bold">
+                      {formatNumber(reports.customers.currentCount)}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      <PercentangeChange
+                        value={reports.customers.percentageChange}
+                      />
+                    </p>
+                  </>
+                )}
               </CardContent>
             </Card>
             <Card>
@@ -67,10 +93,19 @@ export default function Page() {
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{formatNumber(0)}</div>
-                <p className="text-xs text-muted-foreground">
-                  <PercentangeChange value={0} />
-                </p>
+                {isLoadingReports && <LoadingSpinner />}
+                {!isLoadingReports && reports?.sales && (
+                  <>
+                    <div className="text-2xl font-bold">
+                      {formatNumber(reports.sales.currentCount)}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      <PercentangeChange
+                        value={reports.sales.percentageChange}
+                      />
+                    </p>
+                  </>
+                )}
               </CardContent>
             </Card>
             <Card>
@@ -81,10 +116,19 @@ export default function Page() {
                 <Package className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{formatNumber(0)}</div>
-                <p className="text-xs text-muted-foreground">
-                  <PercentangeChange value={0} />
-                </p>
+                {isLoadingReports && <LoadingSpinner />}
+                {!isLoadingReports && reports?.docQuantity && (
+                  <>
+                    <div className="text-2xl font-bold">
+                      {formatNumber(reports.docQuantity.currentTotal)}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      <PercentangeChange
+                        value={reports.docQuantity.percentageChange}
+                      />
+                    </p>
+                  </>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -94,7 +138,14 @@ export default function Page() {
                 <CardTitle>Overview</CardTitle>
               </CardHeader>
               <CardContent className="pl-2">
-                <OverviewChart data={[]} />
+                {isLoadingSales && (
+                  <div className="h-64">
+                    <LoadingSpinner />
+                  </div>
+                )}
+                {!isLoadingSales && yearlySales?.sales && (
+                  <OverviewChart data={yearlySales.sales} />
+                )}
               </CardContent>
             </Card>
             <Card className="col-span-3">
