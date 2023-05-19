@@ -1,0 +1,6 @@
+{
+  "out": "./src/db/migrations",
+  "schema": "./src/db/schema",
+  "connectionString": "postgresql://richardamare:2005@localhost:5432/cloudfarmsales",
+  "breakpoints": false
+}
