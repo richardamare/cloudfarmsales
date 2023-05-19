@@ -35,3 +35,23 @@ export const formatPercent = (value: number) => {
 
   return formatted;
 };
+
+export function generateObjectId(tableName: "customers" | "sales") {
+  function generateRandomString(length: number) {
+    const chars =
+      "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
+    const randomArray = Array.from(
+      { length },
+      () => chars[Math.floor(Math.random() * chars.length)]
+    );
+
+    return randomArray.join("");
+  }
+
+  const prefix = tableName.slice(0, 3).toLowerCase();
+  return `${prefix}_${generateRandomString(8)}`;
+}
+
+export async function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
