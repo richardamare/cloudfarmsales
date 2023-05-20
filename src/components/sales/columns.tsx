@@ -5,7 +5,13 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { Checkbox } from "~/components/ui/checkbox";
 import { type Customer, type SaleWithCustomer } from "~/db/schema";
-import { formatPrice } from "~/lib/utils";
+import { capitalize, formatPrice } from "~/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 import { SalesTableRowActions } from "./sales-table-row-actions";
 
 export const columns: ColumnDef<SaleWithCustomer>[] = [
@@ -53,27 +59,62 @@ export const columns: ColumnDef<SaleWithCustomer>[] = [
     },
   },
   {
-    accessorKey: "docQuantity",
+    accessorKey: "doc",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="DOC Quantity" />
+      <DataTableColumnHeader column={column} title="Day-Old Chicken" />
     ),
     cell: ({ row }) => {
+      const doc = row.getValue<{ total: number; remaining: number }>("doc");
       return (
-        <span className="max-w-[500px] truncate font-medium">
-          {row.getValue<number>("docQuantity")}
-        </span>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="max-w-[500px] truncate font-medium">
+                {doc.remaining > 0 && (
+                  <>
+                    <span className="text-red-500">{doc.remaining}</span>
+                    <span className="text-muted-foreground"> / </span>
+                    <span>{doc.total}</span>
+                  </>
+                )}
+                {doc.remaining === 0 && (
+                  <>
+                    <span>{doc.total}</span>
+                  </>
+                )}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              {doc.remaining > 0 && <p>Remaining / Total</p>}
+              {doc.remaining === 0 && <p>Completed</p>}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       );
     },
   },
+  // {
+  //   accessorKey: "docUnitPrice",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="DOC Unit Price" />
+  //   ),
+  //   cell: ({ row }) => {
+  //     return (
+  //       <span className="max-w-[500px] truncate font-medium">
+  //         {formatPrice(row.getValue<number>("docUnitPrice") / 100)}
+  //       </span>
+  //     );
+  //   },
+  // },
   {
-    accessorKey: "docUnitPrice",
+    accessorKey: "feedAmount",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="DOC Unit Price" />
+      <DataTableColumnHeader column={column} title="Feed Amount" />
     ),
     cell: ({ row }) => {
       return (
         <span className="max-w-[500px] truncate font-medium">
-          {formatPrice(row.getValue<number>("docUnitPrice") / 100)}
+          {row.getValue<number>("feedAmount")} qq
         </span>
       );
     },
@@ -91,6 +132,20 @@ export const columns: ColumnDef<SaleWithCustomer>[] = [
       );
     },
   },
+  {
+    accessorKey: "paymentStatus",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Payment Status" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <span className="max-w-[500px] truncate font-medium">
+          {capitalize(row.getValue("paymentStatus"))}
+        </span>
+      );
+    },
+  },
+
   {
     id: "actions",
     cell: ({ row }) => <SalesTableRowActions row={row} />,

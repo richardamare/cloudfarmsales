@@ -23,10 +23,19 @@ export function OverviewChart({ data }: OverviewChartProps) {
           tickLine={false}
           axisLine={false}
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          tickFormatter={(value) => `$${value}`}
+          tickFormatter={(value: number) => formatPrice(value)}
         />
         <Bar dataKey="total" fill="#adfa1d" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );
 }
+
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "ETB",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+};

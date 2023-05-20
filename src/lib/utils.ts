@@ -5,10 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function capitalize(string: string) {
+  if (string.length === 0) return string;
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export const formatPrice = (price: number) =>
   new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: "ETB",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(price);

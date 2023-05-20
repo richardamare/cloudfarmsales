@@ -8,6 +8,13 @@
       "when": 1684528845230,
       "tag": "0000_green_russian",
       "breakpoints": false
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1684588815467,
+      "tag": "0001_regular_mulholland_black",
+      "breakpoints": false
     }
   ]
 }

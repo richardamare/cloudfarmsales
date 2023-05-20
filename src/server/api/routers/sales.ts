@@ -15,6 +15,9 @@ export const salesRouter = createTRPCRouter({
         docUnitPrice: z.number().int().positive(),
         docDeliveredQuantity: z.number().int().positive(),
         currency: z.string().nonempty(),
+        feedAmount: z.number().int().positive(),
+        feedUnitPrice: z.number().int().positive(),
+        paymentStatus: z.enum(["pending", "paid", "partial", "deposit"]),
       })
     )
     .mutation(async ({ input }) => {
@@ -25,6 +28,9 @@ export const salesRouter = createTRPCRouter({
           docUnitPrice,
           docDeliveredQuantity,
           currency,
+          feedAmount,
+          feedUnitPrice,
+          paymentStatus,
         } = input;
 
         const saleId = generateObjectId("sales");
@@ -49,6 +55,9 @@ export const salesRouter = createTRPCRouter({
               docUnitPrice,
               docDeliveredQuantity,
               currency,
+              feedAmount,
+              feedUnitPrice,
+              paymentStatus,
             })
             .returning()
         )[0];
@@ -79,6 +88,14 @@ export const salesRouter = createTRPCRouter({
         updatedAt: Date;
         total: number;
         deletedAt: Date | null;
+        feedAmount: number;
+        feedUnitPrice: number;
+        paymentStatus: string;
+        docRemaining: number;
+        doc: {
+          total: number;
+          remaining: number;
+        };
         customer: {
           id: string;
           customerId: string;
@@ -99,7 +116,15 @@ export const salesRouter = createTRPCRouter({
           sales.created_at AS "createdAt",
           sales.updated_at AS "updatedAt",
           sales.deleted_at AS "deletedAt",
+          sales.feed_amount AS "feedAmount",
+          sales.feed_unit_price AS "feedUnitPrice",
+          sales.payment_status AS "paymentStatus",
           doc_quantity * doc_unit_price AS total,
+          sales.doc_quantity - sales.doc_delivered_quantity AS "docRemaining",
+          json_build_object(
+            'total', doc_quantity,
+            'remaining', doc_quantity - doc_delivered_quantity
+          ) as doc,
           json_build_object(
             'id', customers.id,
             'customerId', customers.customer_id,
@@ -138,7 +163,7 @@ export const salesRouter = createTRPCRouter({
           await db
             .select()
             .from(salesTable)
-            .where(eq(salesTable.saleId, saleId))
+            .where(eq(salesTable.id, saleId))
             .limit(1)
         )[0];
 
@@ -163,6 +188,9 @@ export const salesRouter = createTRPCRouter({
         docUnitPrice: z.number().int().positive(),
         docDeliveredQuantity: z.number().int().positive(),
         currency: z.string().nonempty(),
+        feedAmount: z.number().int().positive(),
+        feedUnitPrice: z.number().int().positive(),
+        paymentStatus: z.enum(["pending", "paid", "partial", "deposit"]),
       })
     )
     .mutation(async ({ input }) => {
@@ -173,13 +201,16 @@ export const salesRouter = createTRPCRouter({
           docUnitPrice,
           docDeliveredQuantity,
           currency,
+          feedUnitPrice,
+          feedAmount,
+          paymentStatus,
         } = input;
 
         const sale = (
           await db
             .select()
             .from(salesTable)
-            .where(eq(salesTable.saleId, saleId))
+            .where(eq(salesTable.id, saleId))
             .limit(1)
         )[0];
 
@@ -193,8 +224,11 @@ export const salesRouter = createTRPCRouter({
               docUnitPrice,
               docDeliveredQuantity,
               currency,
+              feedUnitPrice,
+              feedAmount,
+              paymentStatus,
             })
-            .where(eq(salesTable.saleId, saleId))
+            .where(eq(salesTable.id, saleId))
             .returning()
         )[0];
 
@@ -224,7 +258,7 @@ export const salesRouter = createTRPCRouter({
           await db
             .select()
             .from(salesTable)
-            .where(eq(salesTable.saleId, saleId))
+            .where(eq(salesTable.id, saleId))
             .limit(1)
         )[0];
 
