@@ -70,9 +70,7 @@ export default function SaleForm({
   onSuccess,
   setIsLoading,
 }: SaleFormProps) {
-  const { data, error: customersError } = api.customers.getList.useQuery();
-
-  const customers = data?.customers ?? [];
+  const customers = api.customers.getList.useQuery();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -103,8 +101,8 @@ export default function SaleForm({
   }
 
   useEffect(() => {
-    if (customersError) {
-      toast.error(customersError.message);
+    if (customers.error) {
+      toast.error(customers.error.message);
     }
     if (create.error) {
       toast.error(create.error.message);
@@ -113,7 +111,7 @@ export default function SaleForm({
     if (update.error) {
       toast.error(update.error.message);
     }
-  }, [customersError, create.error, update.error]);
+  }, [customers.error, create.error, update.error]);
 
   useEffect(() => {
     if (create.isSuccess) {
@@ -162,7 +160,7 @@ export default function SaleForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {customers.map((customer) => (
+                      {(customers.data?.customers ?? []).map((customer) => (
                         <SelectItem key={customer.id} value={customer.id}>
                           {customer.name}
                         </SelectItem>
