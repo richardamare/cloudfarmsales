@@ -8,4 +8,4 @@ echo "Executing >> migrations/$migration_file"
 
 # docker exec -it 5d9655ef9691 psql -U postgres -d iotcloudfarm -c "$content"
 
-docker exec -it cc9990bbc351 psql "postgresql://richardamare:2005@localhost:5432/cloudfarmsales" -c "$content"
+docker exec -it cc9990bbc351 psql "postgresql://postgres:LRdu9e9E583SP6UyBP7s@containers-us-west-184.railway.app:5633/railway" -c "$content"
