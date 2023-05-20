@@ -93,19 +93,6 @@ export const columns: ColumnDef<SaleWithCustomer>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: "docUnitPrice",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="DOC Unit Price" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     return (
-  //       <span className="max-w-[500px] truncate font-medium">
-  //         {formatPrice(row.getValue<number>("docUnitPrice") / 100)}
-  //       </span>
-  //     );
-  //   },
-  // },
   {
     accessorKey: "feedAmount",
     header: ({ column }) => (

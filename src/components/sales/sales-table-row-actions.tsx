@@ -3,6 +3,9 @@ import { Eye, MoreHorizontal, Pen, Trash } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { DeleteSaleAlertDialog } from "~/components/sales/sale-alert-dialog";
+import { EditSaleDialog } from "~/components/sales/sale-dialog";
+import { AlertDialog, AlertDialogTrigger } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { Dialog } from "~/components/ui/dialog";
 import {
@@ -14,11 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { type Sale } from "~/db/schema";
-import { api } from "../../utils/api";
-import { AlertDialog, AlertDialogTrigger } from "../ui/alert-dialog";
-import { DeleteSaleAlertDialog } from "./sale-alert-dialog";
-import { EditSaleDialog } from "./sale-dialog";
-import SaleViewDialog from "./sale-view-dialog";
+import { api } from "~/utils/api";
 
 interface SalesTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -30,12 +29,10 @@ export function SalesTableRowActions<TData>({
   const sale = row.original as Sale;
 
   const [openEdit, setOpenEdit] = useState(false);
-  const [openView, setOpenView] = useState(false);
   const router = useRouter();
   const deleteSale = api.sales.delete.useMutation();
 
   function handleDelete() {
-    console.log("delete sale");
     deleteSale.mutate({ saleId: sale.id });
   }
 
@@ -54,51 +51,43 @@ export function SalesTableRowActions<TData>({
 
   return (
     <Dialog open={openEdit} onOpenChange={setOpenEdit}>
-      <Dialog open={openView} onOpenChange={setOpenView}>
-        <AlertDialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-              >
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[160px]">
-              {/* view */}
-              <DropdownMenuItem onClick={() => setOpenView(true)}>
-                <Eye className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                View
+      <AlertDialog>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-[160px]">
+            <DropdownMenuItem>
+              <Eye className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+              View
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => setOpenEdit(true)}>
+              <Pen className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem>
+                <Trash className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Delete
+                <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setOpenEdit(true)}>
-                <Pen className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <AlertDialogTrigger asChild>
-                <DropdownMenuItem>
-                  <Trash className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                  Delete
-                  <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </AlertDialogTrigger>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <EditSaleDialog
-            sale={sale}
-            open={openEdit}
-            onOpenChange={setOpenEdit}
-          />
-          <DeleteSaleAlertDialog onContinue={handleDelete} />
-          <SaleViewDialog
-            sale={sale}
-            onOpenChange={setOpenView}
-            open={openView}
-          />
-        </AlertDialog>
-      </Dialog>
+            </AlertDialogTrigger>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <EditSaleDialog
+          sale={sale}
+          open={openEdit}
+          onOpenChange={setOpenEdit}
+        />
+        <DeleteSaleAlertDialog onContinue={handleDelete} />
+      </AlertDialog>
     </Dialog>
   );
 }
