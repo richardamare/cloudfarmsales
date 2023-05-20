@@ -36,6 +36,13 @@
       "when": 1684593778043,
       "tag": "0004_naive_jackal",
       "breakpoints": false
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1684617182162,
+      "tag": "0005_tough_salo",
+      "breakpoints": false
     }
   ]
 }

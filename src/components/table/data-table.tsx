@@ -26,7 +26,7 @@ import {
 } from "~/components/ui/table";
 
 import { DataTablePagination } from "./data-table-pagination";
-import { DataTableToolbar, type FilterOption } from "./data-table-toolbar";
+import { type FilterOption } from "./data-table-toolbar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} filters={filters} />
+      {/* <DataTableToolbar table={table} filters={filters} /> */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>

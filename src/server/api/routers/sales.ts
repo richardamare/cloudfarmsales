@@ -12,11 +12,18 @@ export const salesRouter = createTRPCRouter({
       z.object({
         customerId: z.string().nonempty(),
         docQuantity: z.number().int().positive(),
-        docUnitPrice: z.number().int().positive(),
+        docUnitPrice: z
+          .number()
+          .int()
+          .positive()
+          .transform((v) => v * 100),
         docDeliveredQuantity: z.number().int().positive(),
-        currency: z.string().nonempty(),
         feedAmount: z.number().int().positive(),
-        feedUnitPrice: z.number().int().positive(),
+        feedUnitPrice: z
+          .number()
+          .int()
+          .positive()
+          .transform((v) => v * 100),
         paymentStatus: z.enum(["pending", "paid", "partial", "deposit"]),
       })
     )
@@ -27,7 +34,6 @@ export const salesRouter = createTRPCRouter({
           docQuantity,
           docUnitPrice,
           docDeliveredQuantity,
-          currency,
           feedAmount,
           feedUnitPrice,
           paymentStatus,
@@ -54,7 +60,6 @@ export const salesRouter = createTRPCRouter({
               docQuantity,
               docUnitPrice,
               docDeliveredQuantity,
-              currency,
               feedAmount,
               feedUnitPrice,
               paymentStatus,
@@ -83,7 +88,6 @@ export const salesRouter = createTRPCRouter({
         docQuantity: number;
         docUnitPrice: number;
         docDeliveredQuantity: number;
-        currency: string;
         createdAt: Date;
         updatedAt: Date;
         total: number;
@@ -112,7 +116,6 @@ export const salesRouter = createTRPCRouter({
           sales.doc_quantity AS "docQuantity",
           sales.doc_unit_price AS "docUnitPrice",
           sales.doc_delivered_quantity AS "docDeliveredQuantity",
-          sales.currency AS currency,
           sales.created_at AS "createdAt",
           sales.updated_at AS "updatedAt",
           sales.deleted_at AS "deletedAt",
@@ -187,7 +190,6 @@ export const salesRouter = createTRPCRouter({
         docQuantity: z.number().int().positive(),
         docUnitPrice: z.number().int().positive(),
         docDeliveredQuantity: z.number().int().positive(),
-        currency: z.string().nonempty(),
         feedAmount: z.number().int().positive(),
         feedUnitPrice: z.number().int().positive(),
         paymentStatus: z.enum(["pending", "paid", "partial", "deposit"]),
@@ -200,7 +202,6 @@ export const salesRouter = createTRPCRouter({
           docQuantity,
           docUnitPrice,
           docDeliveredQuantity,
-          currency,
           feedUnitPrice,
           feedAmount,
           paymentStatus,
@@ -223,7 +224,6 @@ export const salesRouter = createTRPCRouter({
               docQuantity,
               docUnitPrice,
               docDeliveredQuantity,
-              currency,
               feedUnitPrice,
               feedAmount,
               paymentStatus,
@@ -267,7 +267,7 @@ export const salesRouter = createTRPCRouter({
         const deletedSale = (
           await db
             .delete(salesTable)
-            .where(eq(salesTable.saleId, saleId))
+            .where(eq(salesTable.id, saleId))
             .returning()
         )[0];
 
