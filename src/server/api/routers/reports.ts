@@ -7,6 +7,8 @@ export const reportsRouter = createTRPCRouter({
   dashboard: protectedProcedure.query(async () => {
     try {
       const start = new Date();
+      start.setMonth(start.getMonth() - 1);
+
       const end = new Date();
 
       const previousStart = new Date(start);

@@ -48,7 +48,7 @@ export default function Page() {
                 {!isLoadingReports && reports?.revenue && (
                   <>
                     <div className="text-2xl font-bold">
-                      {formatPrice(reports.revenue.currentTotal)}
+                      {formatPrice(reports.revenue.currentTotal / 100)}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       <PercentangeChange
