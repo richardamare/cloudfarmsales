@@ -3,16 +3,9 @@ import Head from "next/head";
 import DashboardLayout from "~/components/dashboard/dashboard-layout";
 import { OverviewChart } from "~/components/dashboard/overview-chart";
 import { PercentangeChange } from "~/components/dashboard/percent-change";
-import { RecentSales } from "~/components/dashboard/recent-sales";
 import LoadingSpinner from "~/components/global/loading-spinner";
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { formatNumber, formatPrice } from "~/lib/utils";
 import { api } from "~/utils/api";
 
@@ -148,7 +141,7 @@ export default function Page() {
                 )}
               </CardContent>
             </Card>
-            <Card className="col-span-3">
+            {/* <Card className="col-span-3">
               <CardHeader>
                 <CardTitle>Recent Sales</CardTitle>
                 <CardDescription>
@@ -158,7 +151,7 @@ export default function Page() {
               <CardContent>
                 <RecentSales />
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </DashboardLayout>
