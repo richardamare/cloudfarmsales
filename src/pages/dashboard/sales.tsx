@@ -7,6 +7,7 @@ import { AddSaleDialog } from "~/components/sales/sale-dialog";
 import { DataTable } from "~/components/table/data-table";
 import { api } from "~/utils/api";
 import DashboardLayout from "../../components/dashboard/dashboard-layout";
+import { handleAuthorisation } from "../../lib/authorisation";
 
 export default function Page() {
   const { data, isLoading, error } = api.sales.getList.useQuery();
@@ -46,3 +47,5 @@ export default function Page() {
     </>
   );
 }
+
+export const getServerSideProps = handleAuthorisation;

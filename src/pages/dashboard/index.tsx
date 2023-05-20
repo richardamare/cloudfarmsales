@@ -8,6 +8,7 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { formatNumber, formatPrice } from "~/lib/utils";
 import { api } from "~/utils/api";
+import { handleAuthorisation } from "../../lib/authorisation";
 
 export default function Page() {
   const { data: reports, isLoading: isLoadingReports } =
@@ -158,3 +159,5 @@ export default function Page() {
     </>
   );
 }
+
+export const getServerSideProps = handleAuthorisation;

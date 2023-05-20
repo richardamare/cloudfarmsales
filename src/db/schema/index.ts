@@ -11,6 +11,29 @@ import {
 import { z } from "zod";
 import { type RouterOutputs } from "../../utils/api";
 
+export const userStatusEnum = pgEnum("user_status", [
+  "active",
+  "disabled",
+  "waitlisted",
+]);
+
+const userStatusSchema = z.enum(userStatusEnum.enumValues);
+
+export const userStatuses = userStatusEnum.enumValues;
+
+export type UserStatus = z.infer<typeof userStatusSchema>;
+
+export const usersTable = pgTable("users", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clerkId: text("clerk_id").notNull(),
+  status: userStatusEnum("status").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  deletedAt: timestamp("deleted_at"),
+});
+
+export type User = InferModel<typeof usersTable, "select">;
+
 export const customersTable = pgTable("customers", {
   id: uuid("id").primaryKey().defaultRandom(),
   customerId: text("customer_id").notNull(),
