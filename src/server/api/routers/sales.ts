@@ -67,13 +67,54 @@ export const salesRouter = createTRPCRouter({
     }),
   getList: protectedProcedure.query(async () => {
     try {
-      const sales = await db
-        .select()
-        .from(salesTable)
-        .where(sql`deleted_at IS NULL`)
-        .orderBy(sql`created_at DESC`);
+      const result = await db.execute<{
+        id: string;
+        saleId: string;
+        customerId: string;
+        docQuantity: number;
+        docUnitPrice: number;
+        docDeliveredQuantity: number;
+        currency: string;
+        createdAt: Date;
+        updatedAt: Date;
+        total: number;
+        deletedAt: Date | null;
+        customer: {
+          id: string;
+          customerId: string;
+          name: string;
+          region: string;
+          zone: string;
+          phone: string;
+        };
+      }>(sql`
+        SELECT
+          sales.id AS id,
+          sales.sale_id AS "saleId",
+          sales.customer_id AS "customerId",
+          sales.doc_quantity AS "docQuantity",
+          sales.doc_unit_price AS "docUnitPrice",
+          sales.doc_delivered_quantity AS "docDeliveredQuantity",
+          sales.currency AS currency,
+          sales.created_at AS "createdAt",
+          sales.updated_at AS "updatedAt",
+          sales.deleted_at AS "deletedAt",
+          doc_quantity * doc_unit_price AS total,
+          json_build_object(
+            'id', customers.id,
+            'customerId', customers.customer_id,
+            'name', customers.name,
+            'region', customers.region,
+            'zone', customers.zone,
+            'phone', customers.phone
+          ) AS customer
+        FROM sales
+        INNER JOIN customers ON sales.customer_id = customers.id
+        WHERE sales.deleted_at IS NULL
+        ORDER BY sales.created_at DESC
+      `);
 
-      return { sales };
+      return { sales: result.rows };
     } catch (e) {
       const err = e as Error;
       console.log("[ SERVER ]: Failed to get sales", err);
@@ -117,6 +158,7 @@ export const salesRouter = createTRPCRouter({
     .input(
       z.object({
         saleId: z.string().nonempty(),
+        customerId: z.string().nonempty(),
         docQuantity: z.number().int().positive(),
         docUnitPrice: z.number().int().positive(),
         docDeliveredQuantity: z.number().int().positive(),
