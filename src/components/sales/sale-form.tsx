@@ -33,40 +33,51 @@ import { paymenStatuses, type Sale } from "~/db/schema";
 import { capitalize, cn } from "~/lib/utils";
 import { api } from "~/utils/api";
 
-const parsedNumber = z.string().transform((val, ctx) => {
-  const parsed = parseInt(val);
-  if (isNaN(parsed)) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Must be a number",
-    });
+const n = z
+  .number()
+  .int()
+  .positive()
+  .or(
+    z.string().transform((val, ctx) => {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Must be a number",
+        });
 
-    return z.NEVER;
-  }
+        return z.NEVER;
+      }
 
-  const schema = z.number().int().positive();
+      const schema = z.number().int().positive();
 
-  const result = schema.safeParse(parsed);
+      const result = schema.safeParse(parsed);
 
-  if (!result.success) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Must be a positive integer",
-    });
-  }
+      if (!result.success) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Must be a positive integer",
+        });
+      }
 
-  return parsed;
-});
+      return parsed;
+    })
+  );
 
 const formSchema = z.object({
-  docQuantity: parsedNumber,
-  docUnitPrice: parsedNumber,
-  docDeliveredQuantity: parsedNumber,
+  docQuantity: n,
+  docUnitPrice: n,
+  docDeliveredQuantity: n,
+  docBreedType: z.string(),
   customerId: z.string(),
-  feedAmount: parsedNumber,
-  feedUnitPrice: parsedNumber,
+  feedAmount: n,
+  feedUnitPrice: n,
+  feedType: z.string(),
+  vaccineDoses: n,
+  // vaccineUnitPrice: n,
+  vaccineType: z.string(),
   paymentStatus: z.enum(paymenStatuses),
-  soldAt: z.date(),
+  soldAt: z.date().or(z.string().transform((val) => new Date(val))),
 });
 
 interface SaleFormProps {
@@ -88,9 +99,16 @@ export default function SaleForm({
       docQuantity: sale?.docQuantity,
       docUnitPrice: sale?.docUnitPrice ? sale.docUnitPrice / 100 : undefined,
       docDeliveredQuantity: sale?.docDeliveredQuantity,
+      docBreedType: sale?.docBreedType,
       customerId: sale?.customerId,
       feedAmount: sale?.feedAmount,
       feedUnitPrice: sale?.feedUnitPrice ? sale.feedUnitPrice / 100 : undefined,
+      feedType: sale?.feedType,
+      vaccineDoses: sale?.vaccineDoses,
+      // vaccineUnitPrice: sale?.vaccineUnitPrice
+      //   ? sale.vaccineUnitPrice / 100
+      //   : undefined,
+      vaccineType: sale?.vaccineType,
       paymentStatus: sale?.paymentStatus,
       soldAt: sale?.soldAt,
     },
@@ -102,12 +120,12 @@ export default function SaleForm({
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     if (!sale) {
-      create.mutate({ ...values });
+      create.mutate({ ...values, vaccineUnitPrice: 0 });
       return;
     }
 
     if (sale) {
-      update.mutate({ id: sale.id, ...values });
+      update.mutate({ id: sale.id, ...values, vaccineUnitPrice: 0 });
       return;
     }
   }
@@ -155,7 +173,7 @@ export default function SaleForm({
           onSubmit={form.handleSubmit(onSubmit)}
           id="sale-form"
         >
-          <div className="grid grid-cols-2 gap-4 py-4">
+          <div className="grid grid-cols-3 gap-4 py-4">
             <FormField
               control={form.control}
               name="customerId"
@@ -236,6 +254,22 @@ export default function SaleForm({
             />
             <FormField
               control={form.control}
+              name="docBreedType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>DOC Breed Type</FormLabel>
+                  <FormControl>
+                    <Input type="text" placeholder="0" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The breed type of DOC sold to the customer.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="feedAmount"
               render={({ field }) => (
                 <FormItem>
@@ -261,6 +295,70 @@ export default function SaleForm({
                   </FormControl>
                   <FormDescription>
                     The unit price of feed sold to the customer.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="feedType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Feed Type</FormLabel>
+                  <FormControl>
+                    <Input type="text" placeholder="0" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The type of feed sold to the customer.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="vaccineDoses"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Vaccine Doses</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="0" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The number of vaccine doses sold to the customer.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* <FormField
+              control={form.control}
+              name="vaccineUnitPrice"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Vaccine Unit Price</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="0" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The unit price of vaccine sold to the customer.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            /> */}
+            <FormField
+              control={form.control}
+              name="vaccineType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Vaccine Type</FormLabel>
+                  <FormControl>
+                    <Input type="text" placeholder="0" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The type of vaccine sold to the customer.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -326,9 +424,7 @@ export default function SaleForm({
                         mode="single"
                         selected={new Date(field.value)}
                         onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
+                        disabled={(date) => date < new Date("1900-01-01")}
                         // initialFocus
                       />
                     </PopoverContent>

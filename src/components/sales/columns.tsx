@@ -61,7 +61,7 @@ export const columns: ColumnDef<SaleWithCustomer>[] = [
   {
     accessorKey: "doc",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Day-Old Chicken" />
+      <DataTableColumnHeader column={column} title="DOC" />
     ),
     cell: ({ row }) => {
       const doc = row.getValue<{ total: number; remaining: number }>("doc");
@@ -96,7 +96,7 @@ export const columns: ColumnDef<SaleWithCustomer>[] = [
   {
     accessorKey: "feedAmount",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Feed Amount" />
+      <DataTableColumnHeader column={column} title="Feed" />
     ),
     cell: ({ row }) => {
       return (
@@ -122,7 +122,7 @@ export const columns: ColumnDef<SaleWithCustomer>[] = [
   {
     accessorKey: "paymentStatus",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Payment Status" />
+      <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
       return (

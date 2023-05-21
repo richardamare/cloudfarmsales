@@ -21,6 +21,7 @@ const formSchema = z.object({
   phone: z.string().nonempty(),
   region: z.string(),
   zone: z.string(),
+  tinNumber: z.string(),
 });
 
 interface CustomerFormProps {
@@ -41,6 +42,7 @@ export function CustomerForm({
       phone: customer?.phone,
       region: customer?.region,
       zone: customer?.zone,
+      tinNumber: customer?.tinNumber,
     },
   });
 
@@ -54,7 +56,7 @@ export function CustomerForm({
     }
 
     if (customer) {
-      update.mutate({ customerId: customer.id, ...values });
+      update.mutate({ id: customer.id, ...values });
       return;
     }
   }
@@ -123,7 +125,6 @@ export function CustomerForm({
                   <FormControl>
                     <Input placeholder="Phone" {...field} />
                   </FormControl>
-
                   <FormDescription>
                     The phone number of the customer.
                   </FormDescription>
@@ -156,6 +157,22 @@ export function CustomerForm({
                   </FormControl>
 
                   <FormDescription>The zone of the customer.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tinNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>TIN Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="TIN Number" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The TIN number of the customer.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

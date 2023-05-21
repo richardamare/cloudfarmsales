@@ -15,23 +15,16 @@ export const customersRouter = createTRPCRouter({
         region: z.string().nonempty(),
         zone: z.string().nonempty(),
         phone: z.string().nonempty(),
+        tinNumber: z.string().nonempty(),
       })
     )
     .mutation(async ({ input }) => {
       try {
-        const { name, region, zone, phone } = input;
-
         const customerId = generateObjectId("customers");
 
         const result = await db
           .insert(customersTable)
-          .values({
-            customerId,
-            name,
-            region,
-            zone,
-            phone,
-          })
+          .values({ ...input, customerId })
           .returning();
 
         const customer = result[0];
@@ -92,26 +85,20 @@ export const customersRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        customerId: z.string().nonempty(),
+        id: z.string().nonempty(),
         name: z.string().nonempty(),
         region: z.string().nonempty(),
         zone: z.string().nonempty(),
         phone: z.string().nonempty(),
+        tinNumber: z.string().nonempty(),
       })
     )
     .mutation(async ({ input }) => {
       try {
-        const { customerId, name, region, zone, phone } = input;
-
         const result = await db
           .update(customersTable)
-          .set({
-            name,
-            region,
-            zone,
-            phone,
-          })
-          .where(sql`id = ${customerId} AND deleted_at IS NULL`)
+          .set({ ...input })
+          .where(sql`id = ${input.id} AND deleted_at IS NULL`)
           .returning();
 
         const customer = result[0];

@@ -31,7 +31,7 @@ function SaleDialog({ sale, onOpenChange }: SaleDialogProps) {
 
   return (
     <>
-      <DialogContent className="sm:max-w-[750px]">
+      <DialogContent className="sm:max-w-[950px]">
         <DialogHeader>
           <DialogTitle>Add Sale</DialogTitle>
           <DialogDescription>Add a new sale to the database</DialogDescription>

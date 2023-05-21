@@ -79,6 +79,12 @@ export const columns: ColumnDef<Customer>[] = [
     ),
   },
   {
+    accessorKey: "tinNumber",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="TIN Number" />
+    ),
+  },
+  {
     id: "actions",
     cell: ({ row }) => <CustomersTableRowActions row={row} />,
   },

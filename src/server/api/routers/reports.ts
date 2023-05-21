@@ -44,7 +44,7 @@ export const reportsRouter = createTRPCRouter({
       const result = await db.execute<{ month: string; total: number }>(sql`
           SELECT
             to_char(date_trunc('month', sold_at), 'Mon') AS month,
-            SUM(doc_quantity * doc_unit_price) AS total
+            SUM(doc_quantity * doc_unit_price + feed_amount * feed_unit_price + vaccine_doses * vaccine_unit_price) AS total
           FROM sales
           WHERE date_trunc('year', sold_at) = date_trunc('year', CURRENT_DATE)
           GROUP BY month
@@ -196,7 +196,7 @@ async function getRevenue({
   try {
     const currentMonth = await db.execute<{ total: number }>(
       sql`
-          SELECT SUM(doc_quantity * doc_unit_price) AS total
+          SELECT SUM(doc_quantity * doc_unit_price + feed_amount * feed_unit_price + vaccine_doses * vaccine_unit_price) AS total
           FROM sales
           WHERE created_at >= ${start} AND created_at <= ${end}
         `

@@ -18,12 +18,21 @@ export const salesRouter = createTRPCRouter({
           .positive()
           .transform((v) => v * 100),
         docDeliveredQuantity: z.number().int().positive(),
+        docBreedType: z.string().nonempty(),
         feedAmount: z.number().int().positive(),
         feedUnitPrice: z
           .number()
           .int()
           .positive()
           .transform((v) => v * 100),
+        feedType: z.string().nonempty(),
+        vaccineDoses: z.number().int().positive(),
+        vaccineUnitPrice: z
+          .number()
+          .int()
+          .positive()
+          .transform((v) => v * 100),
+        vaccineType: z.string().nonempty(),
         paymentStatus: z.enum(["pending", "paid", "partial", "deposit"]),
         soldAt: z.date().transform((v) => {
           // convert to UTC
@@ -73,14 +82,22 @@ export const salesRouter = createTRPCRouter({
         docQuantity: number;
         docUnitPrice: number;
         docDeliveredQuantity: number;
+        docBreedType: string;
         createdAt: Date;
         updatedAt: Date;
         total: number;
         deletedAt: Date | null;
         feedAmount: number;
         feedUnitPrice: number;
+        feedType: string;
+        vaccineDoses: number;
+        vaccineUnitPrice: number;
+        vaccineType: string;
         paymentStatus: string;
         soldAt: Date;
+        docTotal: number;
+        feedTotal: number;
+        vaccineTotal: number;
         doc: {
           total: number;
           remaining: number;
@@ -101,14 +118,22 @@ export const salesRouter = createTRPCRouter({
           sales.doc_quantity AS "docQuantity",
           sales.doc_unit_price AS "docUnitPrice",
           sales.doc_delivered_quantity AS "docDeliveredQuantity",
+          sales.doc_breed_type AS "docBreedType",
           sales.created_at AS "createdAt",
           sales.updated_at AS "updatedAt",
           sales.deleted_at AS "deletedAt",
           sales.feed_amount AS "feedAmount",
           sales.feed_unit_price AS "feedUnitPrice",
+          sales.feed_type AS "feedType",
+          sales.vaccine_doses AS "vaccineDoses",
+          sales.vaccine_unit_price AS "vaccineUnitPrice",
+          sales.vaccine_type AS "vaccineType",
           sales.payment_status AS "paymentStatus",
           sales.sold_at AS "soldAt",
-          doc_quantity * doc_unit_price AS total,
+          doc_quantity * doc_unit_price + feed_amount * feed_unit_price + vaccine_doses * vaccine_unit_price AS total,
+          doc_quantity * doc_unit_price AS docTotal,
+          feed_amount * feed_unit_price AS feedTotal,
+          vaccine_doses * vaccine_unit_price AS vaccineTotal,
           json_build_object(
             'total', doc_quantity,
             'remaining', doc_quantity - doc_delivered_quantity
@@ -179,12 +204,21 @@ export const salesRouter = createTRPCRouter({
           .positive()
           .transform((v) => v * 100),
         docDeliveredQuantity: z.number().int().positive(),
+        docBreedType: z.string().nonempty(),
         feedAmount: z.number().int().positive(),
         feedUnitPrice: z
           .number()
           .int()
           .positive()
           .transform((v) => v * 100),
+        feedType: z.string().nonempty(),
+        vaccineDoses: z.number().int().positive(),
+        vaccineUnitPrice: z
+          .number()
+          .int()
+          .positive()
+          .transform((v) => v * 100),
+        vaccineType: z.string().nonempty(),
         paymentStatus: z.enum(["pending", "paid", "partial", "deposit"]),
         soldAt: z.date().transform((v) => {
           // convert to UTC

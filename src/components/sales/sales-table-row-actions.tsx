@@ -63,7 +63,7 @@ export function SalesTableRowActions<TData>({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <DropdownMenuItem>
+            <DropdownMenuItem disabled>
               <Eye className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
               View
             </DropdownMenuItem>
