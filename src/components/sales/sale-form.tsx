@@ -36,7 +36,7 @@ import { api } from "~/utils/api";
 const n = z
   .number()
   .int()
-  .positive()
+  .min(0)
   .or(
     z.string().transform((val, ctx) => {
       const parsed = parseInt(val);
@@ -49,7 +49,7 @@ const n = z
         return z.NEVER;
       }
 
-      const schema = z.number().int().positive();
+      const schema = z.number().int().min(0);
 
       const result = schema.safeParse(parsed);
 
@@ -96,15 +96,15 @@ export default function SaleForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      docQuantity: sale?.docQuantity,
-      docUnitPrice: sale?.docUnitPrice ? sale.docUnitPrice / 100 : undefined,
-      docDeliveredQuantity: sale?.docDeliveredQuantity,
+      docQuantity: sale?.docQuantity ?? 0,
+      docUnitPrice: sale?.docUnitPrice ? sale.docUnitPrice / 100 : 0,
+      docDeliveredQuantity: sale?.docDeliveredQuantity ?? 0,
       docBreedType: sale?.docBreedType,
       customerId: sale?.customerId,
-      feedAmount: sale?.feedAmount,
-      feedUnitPrice: sale?.feedUnitPrice ? sale.feedUnitPrice / 100 : undefined,
+      feedAmount: sale?.feedAmount ?? 0,
+      feedUnitPrice: sale?.feedUnitPrice ? sale.feedUnitPrice / 100 : 0,
       feedType: sale?.feedType,
-      vaccineDoses: sale?.vaccineDoses,
+      vaccineDoses: sale?.vaccineDoses ?? 0,
       // vaccineUnitPrice: sale?.vaccineUnitPrice
       //   ? sale.vaccineUnitPrice / 100
       //   : undefined,
@@ -120,12 +120,12 @@ export default function SaleForm({
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     if (!sale) {
-      create.mutate({ ...values, vaccineUnitPrice: 0 });
+      create.mutate({ ...values });
       return;
     }
 
     if (sale) {
-      update.mutate({ id: sale.id, ...values, vaccineUnitPrice: 0 });
+      update.mutate({ id: sale.id, ...values });
       return;
     }
   }
@@ -259,7 +259,7 @@ export default function SaleForm({
                 <FormItem>
                   <FormLabel>DOC Breed Type</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="0" {...field} />
+                    <Input type="text" placeholder="" {...field} />
                   </FormControl>
                   <FormDescription>
                     The breed type of DOC sold to the customer.
@@ -307,7 +307,7 @@ export default function SaleForm({
                 <FormItem>
                   <FormLabel>Feed Type</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="0" {...field} />
+                    <Input type="text" placeholder="" {...field} />
                   </FormControl>
                   <FormDescription>
                     The type of feed sold to the customer.
@@ -355,7 +355,7 @@ export default function SaleForm({
                 <FormItem>
                   <FormLabel>Vaccine Type</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="0" {...field} />
+                    <Input type="text" placeholder="" {...field} />
                   </FormControl>
                   <FormDescription>
                     The type of vaccine sold to the customer.

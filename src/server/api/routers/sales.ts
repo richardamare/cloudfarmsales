@@ -27,11 +27,6 @@ export const salesRouter = createTRPCRouter({
           .transform((v) => v * 100),
         feedType: z.string().nonempty(),
         vaccineDoses: z.number().int().positive(),
-        vaccineUnitPrice: z
-          .number()
-          .int()
-          .positive()
-          .transform((v) => v * 100),
         vaccineType: z.string().nonempty(),
         paymentStatus: z.enum(["pending", "paid", "partial", "deposit"]),
         soldAt: z.date().transform((v) => {
@@ -57,7 +52,7 @@ export const salesRouter = createTRPCRouter({
         const sale = (
           await db
             .insert(salesTable)
-            .values({ ...input, saleId })
+            .values({ ...input, saleId, vaccineUnitPrice: 0 })
             .returning()
         )[0];
 
@@ -213,11 +208,6 @@ export const salesRouter = createTRPCRouter({
           .transform((v) => v * 100),
         feedType: z.string().nonempty(),
         vaccineDoses: z.number().int().positive(),
-        vaccineUnitPrice: z
-          .number()
-          .int()
-          .positive()
-          .transform((v) => v * 100),
         vaccineType: z.string().nonempty(),
         paymentStatus: z.enum(["pending", "paid", "partial", "deposit"]),
         soldAt: z.date().transform((v) => {
