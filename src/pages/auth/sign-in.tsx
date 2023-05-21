@@ -1,9 +1,7 @@
 import { Command } from "lucide-react";
 import Head from "next/head";
 import Link from "next/link";
-import { Suspense } from "react";
 import AuthForm from "~/components/auth/auth-form";
-import LoadingSpinner from "~/components/global/loading-spinner";
 import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
@@ -57,9 +55,7 @@ export default function Page() {
                 Enter your email below to sign in to your account.
               </p>
             </div>
-            <Suspense fallback={<LoadingSpinner />}>
-              <AuthForm action="sign-in" />
-            </Suspense>
+            <AuthForm action="sign-in" />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link
