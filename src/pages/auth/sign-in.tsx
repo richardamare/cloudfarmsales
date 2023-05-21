@@ -36,7 +36,7 @@ export default function Page() {
           <div className="relative z-20 flex items-center text-lg font-medium">
             <Command className="mr-2 h-6 w-6" /> Ethio-Euro Trading PLC.
           </div>
-          <div className="relative z-20 mt-auto">
+          {/* <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
                 &ldquo;This library has saved me countless hours of work and
@@ -45,7 +45,7 @@ export default function Page() {
               </p>
               <footer className="text-sm">Sofia Davis</footer>
             </blockquote>
-          </div>
+          </div> */}
         </div>
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
