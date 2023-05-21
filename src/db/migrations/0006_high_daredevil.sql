@@ -1,1 +1,0 @@
-ALTER TABLE "sales" ADD COLUMN "sold_at" timestamp NOT NULL;

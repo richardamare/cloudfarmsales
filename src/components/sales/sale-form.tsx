@@ -59,12 +59,12 @@ const parsedNumber = z.string().transform((val, ctx) => {
 });
 
 const formSchema = z.object({
-  docQuantity: z.number().int().positive(),
-  docUnitPrice: z.number().int().positive(),
-  docDeliveredQuantity: z.number().int().positive(),
+  docQuantity: parsedNumber,
+  docUnitPrice: parsedNumber,
+  docDeliveredQuantity: parsedNumber,
   customerId: z.string(),
-  feedAmount: z.number().int().positive(),
-  feedUnitPrice: z.number().int().positive(),
+  feedAmount: parsedNumber,
+  feedUnitPrice: parsedNumber,
   paymentStatus: z.enum(paymenStatuses),
   soldAt: z.date(),
 });

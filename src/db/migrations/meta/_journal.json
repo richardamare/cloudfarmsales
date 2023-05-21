@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1684528845230,
-      "tag": "0000_green_russian",
-      "breakpoints": false
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1684588815467,
-      "tag": "0001_regular_mulholland_black",
-      "breakpoints": false
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1684591661758,
-      "tag": "0002_unique_masque",
-      "breakpoints": false
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1684592928003,
-      "tag": "0003_rapid_jasper_sitwell",
-      "breakpoints": false
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1684593778043,
-      "tag": "0004_naive_jackal",
-      "breakpoints": false
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1684617182162,
-      "tag": "0005_tough_salo",
-      "breakpoints": false
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1684655744803,
-      "tag": "0006_high_daredevil",
+      "when": 1684669463388,
+      "tag": "0000_closed_banshee",
       "breakpoints": false
     }
   ]

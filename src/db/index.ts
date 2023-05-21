@@ -3,11 +3,11 @@ import { Pool } from "pg";
 import { env } from "~/env.mjs";
 
 const connectionString = () => {
-  if (env.NODE_ENV === "production") {
-    return env.POSTGRES_URL + "?sslmode=require";
-  }
+  // if (env.NODE_ENV === "production") {
+  return env.POSTGRES_URL + "?sslmode=require";
+  // }
 
-  return env.POSTGRES_URL;
+  // return env.POSTGRES_URL;
 };
 
 const pool = new Pool({

@@ -1,3 +1,15 @@
+DO $$ BEGIN
+ CREATE TYPE "payment_status" AS ENUM('pending', 'paid', 'partial', 'deposit');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+ CREATE TYPE "user_status" AS ENUM('active', 'disabled', 'waitlisted');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+
 CREATE TABLE IF NOT EXISTS "customers" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"customer_id" text NOT NULL,
@@ -17,7 +29,19 @@ CREATE TABLE IF NOT EXISTS "sales" (
 	"doc_quantity" integer NOT NULL,
 	"doc_unit_price" integer NOT NULL,
 	"doc_delivered_quantity" integer NOT NULL,
-	"currency" text NOT NULL,
+	"feed_amount" integer NOT NULL,
+	"feed_unit_price" integer NOT NULL,
+	"payment_status" payment_status NOT NULL,
+	"sold_at" timestamp NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"deleted_at" timestamp
+);
+
+CREATE TABLE IF NOT EXISTS "users" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"clerk_id" text NOT NULL,
+	"status" user_status NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp
