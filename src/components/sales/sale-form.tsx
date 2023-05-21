@@ -72,10 +72,10 @@ const formSchema = z.object({
   customerId: z.string(),
   feedAmount: n,
   feedUnitPrice: n,
-  feedType: z.string(),
+  feedType: z.string().default(""),
   vaccineDoses: n,
   // vaccineUnitPrice: n,
-  vaccineType: z.string(),
+  vaccineType: z.string().default(""),
   paymentStatus: z.enum(paymenStatuses),
   soldAt: z.date().or(z.string().transform((val) => new Date(val))),
 });
@@ -103,12 +103,12 @@ export default function SaleForm({
       customerId: sale?.customerId,
       feedAmount: sale?.feedAmount ?? 0,
       feedUnitPrice: sale?.feedUnitPrice ? sale.feedUnitPrice / 100 : 0,
-      feedType: sale?.feedType,
+      feedType: sale?.feedType ?? "",
       vaccineDoses: sale?.vaccineDoses ?? 0,
       // vaccineUnitPrice: sale?.vaccineUnitPrice
       //   ? sale.vaccineUnitPrice / 100
       //   : undefined,
-      vaccineType: sale?.vaccineType,
+      vaccineType: sale?.vaccineType ?? "",
       paymentStatus: sale?.paymentStatus,
       soldAt: sale?.soldAt,
     },
