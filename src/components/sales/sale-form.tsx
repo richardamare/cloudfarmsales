@@ -1,8 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format, isValid } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
+import { Button } from "~/components/ui/button";
+import { Calendar } from "~/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -14,6 +18,11 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -21,7 +30,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { paymenStatuses, type Sale } from "~/db/schema";
-import { capitalize } from "~/lib/utils";
+import { capitalize, cn } from "~/lib/utils";
 import { api } from "~/utils/api";
 
 const parsedNumber = z.string().transform((val, ctx) => {
@@ -50,13 +59,14 @@ const parsedNumber = z.string().transform((val, ctx) => {
 });
 
 const formSchema = z.object({
-  docQuantity: parsedNumber,
-  docUnitPrice: parsedNumber,
-  docDeliveredQuantity: parsedNumber,
+  docQuantity: z.number().int().positive(),
+  docUnitPrice: z.number().int().positive(),
+  docDeliveredQuantity: z.number().int().positive(),
   customerId: z.string(),
-  feedAmount: parsedNumber,
-  feedUnitPrice: parsedNumber,
+  feedAmount: z.number().int().positive(),
+  feedUnitPrice: z.number().int().positive(),
   paymentStatus: z.enum(paymenStatuses),
+  soldAt: z.date(),
 });
 
 interface SaleFormProps {
@@ -76,12 +86,13 @@ export default function SaleForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       docQuantity: sale?.docQuantity,
-      docUnitPrice: sale?.docUnitPrice,
+      docUnitPrice: sale?.docUnitPrice ? sale.docUnitPrice / 100 : undefined,
       docDeliveredQuantity: sale?.docDeliveredQuantity,
       customerId: sale?.customerId,
       feedAmount: sale?.feedAmount,
-      feedUnitPrice: sale?.feedUnitPrice,
+      feedUnitPrice: sale?.feedUnitPrice ? sale.feedUnitPrice / 100 : undefined,
       paymentStatus: sale?.paymentStatus,
+      soldAt: sale?.soldAt,
     },
   });
 
@@ -89,13 +100,14 @@ export default function SaleForm({
   const update = api.sales.update.useMutation();
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
     if (!sale) {
       create.mutate({ ...values });
       return;
     }
 
     if (sale) {
-      update.mutate({ saleId: sale.id, ...values });
+      update.mutate({ id: sale.id, ...values });
       return;
     }
   }
@@ -280,6 +292,48 @@ export default function SaleForm({
                   <FormDescription>
                     The payment status of the sale.
                   </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="soldAt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sold At</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value && isValid(new Date(field.value)) ? (
+                            <>{format(new Date(field.value), "yyyy-MM-dd")}</>
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={new Date(field.value)}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date("1900-01-01")
+                        }
+                        // initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormDescription>The date the sale was made.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

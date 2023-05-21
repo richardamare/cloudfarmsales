@@ -132,7 +132,20 @@ export const columns: ColumnDef<SaleWithCustomer>[] = [
       );
     },
   },
-
+  {
+    accessorKey: "soldAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Sold At" />
+    ),
+    cell: ({ row }) => {
+      const soldAt = new Date(row.getValue<string>("soldAt"));
+      return (
+        <span className="max-w-[500px] truncate font-medium">
+          {soldAt.toLocaleDateString()}
+        </span>
+      );
+    },
+  },
   {
     id: "actions",
     cell: ({ row }) => <SalesTableRowActions row={row} />,

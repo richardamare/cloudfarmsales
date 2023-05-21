@@ -75,6 +75,7 @@ export const salesTable = pgTable(
     feedAmount: integer("feed_amount").notNull(),
     feedUnitPrice: integer("feed_unit_price").notNull(),
     paymentStatus: paymentStatusEnum("payment_status").notNull(),
+    soldAt: timestamp("sold_at").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
     deletedAt: timestamp("deleted_at"),

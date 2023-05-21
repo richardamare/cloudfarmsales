@@ -25,27 +25,21 @@ export const salesRouter = createTRPCRouter({
           .positive()
           .transform((v) => v * 100),
         paymentStatus: z.enum(["pending", "paid", "partial", "deposit"]),
+        soldAt: z.date().transform((v) => {
+          // convert to UTC
+          return new Date(Date.UTC(v.getFullYear(), v.getMonth(), v.getDate()));
+        }),
       })
     )
     .mutation(async ({ input }) => {
       try {
-        const {
-          customerId,
-          docQuantity,
-          docUnitPrice,
-          docDeliveredQuantity,
-          feedAmount,
-          feedUnitPrice,
-          paymentStatus,
-        } = input;
-
         const saleId = generateObjectId("sales");
 
         const customer = (
           await db
             .select()
             .from(customersTable)
-            .where(eq(customersTable.id, customerId))
+            .where(eq(customersTable.id, input.customerId))
             .limit(1)
         )[0];
 
@@ -54,16 +48,7 @@ export const salesRouter = createTRPCRouter({
         const sale = (
           await db
             .insert(salesTable)
-            .values({
-              saleId,
-              customerId,
-              docQuantity,
-              docUnitPrice,
-              docDeliveredQuantity,
-              feedAmount,
-              feedUnitPrice,
-              paymentStatus,
-            })
+            .values({ ...input, saleId })
             .returning()
         )[0];
 
@@ -95,7 +80,7 @@ export const salesRouter = createTRPCRouter({
         feedAmount: number;
         feedUnitPrice: number;
         paymentStatus: string;
-        docRemaining: number;
+        soldAt: Date;
         doc: {
           total: number;
           remaining: number;
@@ -122,8 +107,8 @@ export const salesRouter = createTRPCRouter({
           sales.feed_amount AS "feedAmount",
           sales.feed_unit_price AS "feedUnitPrice",
           sales.payment_status AS "paymentStatus",
+          sales.sold_at AS "soldAt",
           doc_quantity * doc_unit_price AS total,
-          sales.doc_quantity - sales.doc_delivered_quantity AS "docRemaining",
           json_build_object(
             'total', doc_quantity,
             'remaining', doc_quantity - doc_delivered_quantity
@@ -185,33 +170,35 @@ export const salesRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        saleId: z.string().nonempty(),
+        id: z.string().nonempty(),
         customerId: z.string().nonempty(),
         docQuantity: z.number().int().positive(),
-        docUnitPrice: z.number().int().positive(),
+        docUnitPrice: z
+          .number()
+          .int()
+          .positive()
+          .transform((v) => v * 100),
         docDeliveredQuantity: z.number().int().positive(),
         feedAmount: z.number().int().positive(),
-        feedUnitPrice: z.number().int().positive(),
+        feedUnitPrice: z
+          .number()
+          .int()
+          .positive()
+          .transform((v) => v * 100),
         paymentStatus: z.enum(["pending", "paid", "partial", "deposit"]),
+        soldAt: z.date().transform((v) => {
+          // convert to UTC
+          return new Date(Date.UTC(v.getFullYear(), v.getMonth(), v.getDate()));
+        }),
       })
     )
     .mutation(async ({ input }) => {
       try {
-        const {
-          saleId,
-          docQuantity,
-          docUnitPrice,
-          docDeliveredQuantity,
-          feedUnitPrice,
-          feedAmount,
-          paymentStatus,
-        } = input;
-
         const sale = (
           await db
             .select()
             .from(salesTable)
-            .where(eq(salesTable.id, saleId))
+            .where(eq(salesTable.id, input.id))
             .limit(1)
         )[0];
 
@@ -220,15 +207,8 @@ export const salesRouter = createTRPCRouter({
         const updatedSale = (
           await db
             .update(salesTable)
-            .set({
-              docQuantity,
-              docUnitPrice,
-              docDeliveredQuantity,
-              feedUnitPrice,
-              feedAmount,
-              paymentStatus,
-            })
-            .where(eq(salesTable.id, saleId))
+            .set({ ...input })
+            .where(eq(salesTable.id, input.id))
             .returning()
         )[0];
 
@@ -252,13 +232,11 @@ export const salesRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       try {
-        const { saleId } = input;
-
         const sale = (
           await db
             .select()
             .from(salesTable)
-            .where(eq(salesTable.id, saleId))
+            .where(eq(salesTable.id, input.saleId))
             .limit(1)
         )[0];
 
@@ -267,7 +245,7 @@ export const salesRouter = createTRPCRouter({
         const deletedSale = (
           await db
             .delete(salesTable)
-            .where(eq(salesTable.id, saleId))
+            .where(eq(salesTable.id, input.saleId))
             .returning()
         )[0];
 

@@ -43,6 +43,13 @@
       "when": 1684617182162,
       "tag": "0005_tough_salo",
       "breakpoints": false
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1684655744803,
+      "tag": "0006_high_daredevil",
+      "breakpoints": false
     }
   ]
 }
