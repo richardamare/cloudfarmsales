@@ -43,10 +43,10 @@ export const reportsRouter = createTRPCRouter({
     try {
       const result = await db.execute<{ month: string; total: number }>(sql`
           SELECT
-            to_char(date_trunc('month', created_at), 'Mon') AS month,
+            to_char(date_trunc('month', sold_at), 'Mon') AS month,
             SUM(doc_quantity * doc_unit_price) AS total
           FROM sales
-          WHERE date_trunc('year', created_at) = date_trunc('year', CURRENT_DATE)
+          WHERE date_trunc('year', sold_at) = date_trunc('year', CURRENT_DATE)
           GROUP BY month
           ORDER BY month
         `);
