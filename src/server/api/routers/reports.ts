@@ -46,7 +46,7 @@ export const reportsRouter = createTRPCRouter({
             to_char(date_trunc('month', sold_at), 'Mon') AS month,
             SUM(doc_quantity * doc_unit_price + feed_amount * feed_unit_price + vaccine_doses * vaccine_unit_price) AS total
           FROM sales
-          WHERE date_trunc('year', sold_at) = date_trunc('year', CURRENT_DATE)
+          WHERE date_trunc('year', sold_at) = date_trunc('year', CURRENT_DATE) AND deleted_at IS NULL
           GROUP BY month
           ORDER BY month
         `);
@@ -110,14 +110,14 @@ async function getCustomersReport({
       sql`
           SELECT COUNT(*)
           FROM customers
-          WHERE created_at >= ${start} AND created_at <= ${end}
+          WHERE created_at >= ${start} AND created_at <= ${end} AND deleted_at IS NULL
         `
     );
     const previousMonth = await db.execute<{ count: number }>(
       sql`
           SELECT COUNT(*)
           FROM customers
-          WHERE created_at >= ${previousStart} AND created_at <= ${previousEnd}
+          WHERE created_at >= ${previousStart} AND created_at <= ${previousEnd} AND deleted_at IS NULL
         `
     );
 
@@ -154,14 +154,14 @@ async function getSalesReport({
       sql`
           SELECT COUNT(*)
           FROM sales
-          WHERE created_at >= ${start} AND created_at <= ${end}
+          WHERE created_at >= ${start} AND created_at <= ${end} AND deleted_at IS NULL
         `
     );
     const previousMonth = await db.execute<{ count: number }>(
       sql`
           SELECT COUNT(*)
           FROM sales
-          WHERE created_at >= ${previousStart} AND created_at <= ${previousEnd}
+          WHERE created_at >= ${previousStart} AND created_at <= ${previousEnd} AND deleted_at IS NULL
         `
     );
 
@@ -198,7 +198,7 @@ async function getRevenue({
       sql`
           SELECT SUM(doc_quantity * doc_unit_price + feed_amount * feed_unit_price + vaccine_doses * vaccine_unit_price) AS total
           FROM sales
-          WHERE created_at >= ${start} AND created_at <= ${end}
+          WHERE created_at >= ${start} AND created_at <= ${end} AND deleted_at IS NULL
         `
     );
 
@@ -206,7 +206,7 @@ async function getRevenue({
       sql`
           SELECT SUM(doc_quantity * doc_unit_price) AS total
           FROM sales
-          WHERE created_at >= ${previousStart} AND created_at <= ${previousEnd}
+          WHERE created_at >= ${previousStart} AND created_at <= ${previousEnd} AND deleted_at IS NULL
         `
     );
 
@@ -243,7 +243,7 @@ async function getDOCQuantity({
       sql`
           SELECT SUM(doc_quantity) AS total
           FROM sales
-          WHERE created_at >= ${start} AND created_at <= ${end}
+          WHERE created_at >= ${start} AND created_at <= ${end} AND deleted_at IS NULL
         `
     );
 
@@ -251,7 +251,7 @@ async function getDOCQuantity({
       sql`
           SELECT SUM(doc_quantity) AS total
           FROM sales
-          WHERE created_at >= ${previousStart} AND created_at <= ${previousEnd}
+          WHERE created_at >= ${previousStart} AND created_at <= ${previousEnd} AND deleted_at IS NULL
         `
     );
 
