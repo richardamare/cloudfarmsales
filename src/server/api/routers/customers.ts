@@ -16,6 +16,8 @@ export const customersRouter = createTRPCRouter({
         zone: z.string().nonempty(),
         phone: z.string().nonempty(),
         tinNumber: z.string().nonempty(),
+        woreda: z.string().nonempty(),
+        kebele: z.string().nonempty(),
       })
     )
     .mutation(async ({ input }) => {
@@ -91,6 +93,8 @@ export const customersRouter = createTRPCRouter({
         zone: z.string().nonempty(),
         phone: z.string().nonempty(),
         tinNumber: z.string().nonempty(),
+        woreda: z.string().nonempty(),
+        kebele: z.string().nonempty(),
       })
     )
     .mutation(async ({ input }) => {

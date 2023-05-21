@@ -22,6 +22,8 @@ const formSchema = z.object({
   region: z.string(),
   zone: z.string(),
   tinNumber: z.string(),
+  woreda: z.string(),
+  kebele: z.string(),
 });
 
 interface CustomerFormProps {
@@ -43,6 +45,8 @@ export function CustomerForm({
       region: customer?.region,
       zone: customer?.zone,
       tinNumber: customer?.tinNumber,
+      woreda: customer?.woreda,
+      kebele: customer?.kebele,
     },
   });
 
@@ -155,8 +159,35 @@ export function CustomerForm({
                   <FormControl>
                     <Input placeholder="Zone" {...field} />
                   </FormControl>
-
                   <FormDescription>The zone of the customer.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="woreda"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Woreda</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Woreda" {...field} />
+                  </FormControl>
+                  <FormDescription>The woreda of the customer.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="kebele"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Kebele</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Kebele" {...field} />
+                  </FormControl>
+                  <FormDescription>The kebele of the customer.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

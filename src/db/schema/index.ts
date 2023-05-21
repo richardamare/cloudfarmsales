@@ -42,6 +42,8 @@ export const customersTable = pgTable("customers", {
   zone: text("zone").notNull(),
   phone: text("phone").notNull(),
   tinNumber: text("tin_number").notNull(),
+  woreda: text("woreda").notNull(),
+  kebele: text("kebele").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   deletedAt: timestamp("deleted_at"),

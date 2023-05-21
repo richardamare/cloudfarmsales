@@ -15,6 +15,13 @@
       "when": 1684671695691,
       "tag": "0001_bitter_jack_murdock",
       "breakpoints": false
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1684675403521,
+      "tag": "0002_low_harry_osborn",
+      "breakpoints": false
     }
   ]
 }
