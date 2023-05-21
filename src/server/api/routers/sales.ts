@@ -278,8 +278,9 @@ export const salesRouter = createTRPCRouter({
 
         const deletedSale = (
           await db
-            .delete(salesTable)
-            .where(eq(salesTable.id, input.saleId))
+            .update(salesTable)
+            .set({ deletedAt: new Date() })
+            .where(sql`id = ${input.saleId} AND deleted_at IS NULL`)
             .returning()
         )[0];
 

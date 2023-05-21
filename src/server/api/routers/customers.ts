@@ -126,7 +126,7 @@ export const customersRouter = createTRPCRouter({
           .set({
             deletedAt: sql`NOW()`,
           })
-          .where(sql`customer_id = ${customerId} AND deleted_at IS NULL`)
+          .where(sql`id = ${customerId} AND deleted_at IS NULL`)
           .returning();
 
         const customer = result[0];
