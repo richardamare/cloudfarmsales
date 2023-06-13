@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { type Sale } from "~/db/schema";
+import { type Sale } from "~/lib/db/schema";
 import SaleForm from "./sale-form";
 
 interface SaleDialogProps {

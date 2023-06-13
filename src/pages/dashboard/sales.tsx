@@ -5,7 +5,7 @@ import LoadingPage from "~/components/global/loading-page";
 import { columns } from "~/components/sales/columns";
 import { AddSaleDialog } from "~/components/sales/sale-dialog";
 import { DataTable } from "~/components/table/data-table";
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 import DashboardLayout from "../../components/dashboard/dashboard-layout";
 import { handleAuthorisation } from "../../lib/authorisation";
 

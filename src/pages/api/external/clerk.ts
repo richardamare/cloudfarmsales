@@ -1,8 +1,8 @@
 import { type WebhookEvent } from "@clerk/nextjs/api";
 import { sql } from "drizzle-orm";
 import { type NextApiRequest, type NextApiResponse } from "next";
-import { db } from "~/db";
-import { usersTable } from "~/db/schema";
+import { db } from "src/lib/db";
+import { usersTable } from "~/lib/db/schema";
 
 export default async function handler(
   req: NextApiRequest,

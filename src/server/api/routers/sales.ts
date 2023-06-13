@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import { eq, sql } from "drizzle-orm";
 import { z } from "zod";
-import { db } from "~/db";
-import { customersTable, salesTable } from "~/db/schema";
+import { db } from "src/lib/db";
+import { customersTable, salesTable } from "~/lib/db/schema";
 import { generateObjectId } from "~/lib/utils";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 

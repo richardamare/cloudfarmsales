@@ -13,8 +13,8 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { type Customer } from "~/db/schema";
-import { api } from "~/utils/api";
+import { type Customer } from "~/lib/db/schema";
+import { api } from "~/lib/api";
 
 const formSchema = z.object({
   name: z.string().nonempty(),

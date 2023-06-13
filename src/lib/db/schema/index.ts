@@ -9,7 +9,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { z } from "zod";
-import { type RouterOutputs } from "../../utils/api";
+import { type RouterOutputs } from "../../api";
 
 export const userStatusEnum = pgEnum("user_status", [
   "active",

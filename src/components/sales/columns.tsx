@@ -4,7 +4,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { Checkbox } from "~/components/ui/checkbox";
-import { type Customer, type SaleWithCustomer } from "~/db/schema";
+import { type Customer, type SaleWithCustomer } from "~/lib/db/schema";
 import { capitalize, formatPrice } from "~/lib/utils";
 import {
   Tooltip,

@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { type Customer } from "~/db/schema";
+import { type Customer } from "~/lib/db/schema";
 import { CustomerForm } from "./customer-form";
 
 interface CustomerDialogProps {

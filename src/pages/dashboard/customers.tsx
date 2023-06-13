@@ -4,7 +4,7 @@ import { AddCustomerDialog } from "~/components/customers/customer-dialog";
 import DashboardLayout from "~/components/dashboard/dashboard-layout";
 import LoadingPage from "~/components/global/loading-page";
 import { DataTable } from "~/components/table/data-table";
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 import { handleAuthorisation } from "../../lib/authorisation";
 
 export default function Page() {

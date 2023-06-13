@@ -1,8 +1,8 @@
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { sql } from "drizzle-orm";
 import { type GetServerSideProps } from "next";
-import { db } from "../db";
-import { usersTable } from "../db/schema";
+import { db } from "src/lib/db";
+import { usersTable } from "~/lib/db/schema";
 
 export const handleAuthorisation: GetServerSideProps = async (ctx) => {
   try {

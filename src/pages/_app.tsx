@@ -1,6 +1,6 @@
 import { type AppType } from "next/app";
 
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
@@ -8,7 +8,7 @@ import "~/styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <ClerkProvider>
+    <ClerkProvider {...pageProps}>
       <Toaster position="bottom-right" reverseOrder={false} />
       <Component {...pageProps} />
     </ClerkProvider>

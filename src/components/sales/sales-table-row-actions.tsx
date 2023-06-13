@@ -16,8 +16,8 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { type Sale } from "~/db/schema";
-import { api } from "~/utils/api";
+import { type Sale } from "~/lib/db/schema";
+import { api } from "~/lib/api";
 
 interface SalesTableRowActionsProps<TData> {
   row: Row<TData>;

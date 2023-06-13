@@ -15,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { type Customer } from "~/db/schema";
+import { type Customer } from "~/lib/db/schema";
 import { cn } from "~/lib/utils";
 
 interface CustomerPickerProps {

@@ -122,6 +122,7 @@ export default function AuthForm({
         redirectUrlComplete: "/dashboard",
       });
     } catch (e) {
+      console.log(e);
       const error = e as Error;
       toast.error(error.message);
     } finally {

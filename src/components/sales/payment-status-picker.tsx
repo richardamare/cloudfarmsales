@@ -15,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { paymenStatuses, type PaymentStatus } from "~/db/schema";
+import { paymenStatuses, type PaymentStatus } from "~/lib/db/schema";
 import { capitalize, cn } from "~/lib/utils";
 
 interface PaymentStatusPickerProps {

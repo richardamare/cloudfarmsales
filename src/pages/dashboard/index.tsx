@@ -7,7 +7,7 @@ import LoadingSpinner from "~/components/global/loading-spinner";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { formatNumber, formatPrice } from "~/lib/utils";
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 import { handleAuthorisation } from "../../lib/authorisation";
 
 export default function Page() {

@@ -14,8 +14,8 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { type Customer } from "~/db/schema";
-import { api } from "~/utils/api";
+import { type Customer } from "~/lib/db/schema";
+import { api } from "~/lib/api";
 import { DeleteCustomerAlertDialog } from "./customer-alert-dialog";
 
 interface CustomersTableRowActionsProps<TData> {

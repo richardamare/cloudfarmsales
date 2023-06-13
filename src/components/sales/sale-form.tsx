@@ -29,9 +29,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { paymenStatuses, type Sale } from "~/db/schema";
+import { paymenStatuses, type Sale } from "~/lib/db/schema";
 import { capitalize, cn } from "~/lib/utils";
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 
 const n = z
   .number()

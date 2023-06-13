@@ -1,5 +1,6 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import { sql } from "@vercel/postgres";
+import { drizzle } from "drizzle-orm/vercel-postgres";
+
 import { env } from "~/env.mjs";
 
 const connectionString = () => {
@@ -10,8 +11,4 @@ const connectionString = () => {
   // return env.POSTGRES_URL;
 };
 
-const pool = new Pool({
-  connectionString: connectionString(),
-});
-
-export const db = drizzle(pool);
+export const db = drizzle(sql);

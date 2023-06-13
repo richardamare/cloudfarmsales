@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { sql } from "drizzle-orm";
-import { db } from "~/db";
+import { db } from "src/lib/db";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const reportsRouter = createTRPCRouter({
