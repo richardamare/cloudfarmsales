@@ -32,7 +32,7 @@ export default async function handler(
       case "user.created":
         await db.insert(usersTable).values({
           clerkId: userId,
-          status: "waitlisted",
+          status: "active",
         });
         break;
       case "user.deleted":
